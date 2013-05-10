@@ -1,2 +1,9 @@
 MODULES = 
 	$(MODULE client.api)
+	$(MODULE client.input)
+	$(MODULE client.camera)
+	$(MODULE util.common)
+	$(MODULE util.log)
+	$(MODULE util.matrix)
+	$(MODULE util.quaternion)
+	$(MODULE util.vector)
