@@ -11,8 +11,8 @@ cd ..\src\voxlap
 nmake foguan.c
 
 @rem Copy result
-move foguan.exe ..\..\bin\foguan.exe
-move foguan.exe.manifest ..\..\bin\foguan.exe.manifest
+move foguan.exe ..\..\bin\voxbattles.exe
+move foguan.exe.manifest ..\..\bin\voxbattles.exe.manifest
 
 @rem Save v5.obj
 ren v5.obj v5.obj.back
@@ -22,5 +22,3 @@ del *.obj
 
 @rem Restore v5.obj
 ren v5.obj.back v5.obj
-
-pause

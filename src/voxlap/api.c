@@ -9,6 +9,8 @@ typedef void (*pt_debugPrint)();
 
 pt_debugPrint p_debugPrint;
 
+#define CORE_DLL "core.dll"
+
 void debugPrint()
 {
 	p_debugPrint();
@@ -16,7 +18,7 @@ void debugPrint()
 
 int loadFoguanCore()
 {
-	HINSTANCE lib = LoadLibrary(TEXT("foguan.dll"));
+	HINSTANCE lib = LoadLibrary(TEXT(CORE_DLL));
 	if(!lib)
 	{
 		return 1;
@@ -33,7 +35,7 @@ int loadFoguanCore()
 
 int unloadFoguanCore()
 {
-	if(!FreeLibrary(GetModuleHandle(TEXT("foguan.dll"))))
+	if(!FreeLibrary(GetModuleHandle(TEXT(CORE_DLL))))
 	{
 		return 0;
 	}

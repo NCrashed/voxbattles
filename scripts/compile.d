@@ -13,7 +13,7 @@ import std.file;
 
 string compileVoxlap()
 {
-	if(!exists("../bin/foguan.exe"))
+	if(!exists("../bin/voxbattles.exe"))
 	{
 		return "buildVoxlab.bat";
 	}
@@ -22,13 +22,12 @@ string compileVoxlap()
 
 int main(string[] args)
 {
-	addCompTarget("foguanCore", "../bin", "foguan", BUILD.SHARED);
+	addCompTarget("voxbattlesCore", "../bin", "core", BUILD.SHARED);
 	addSource("../src/foguan");
 
-	//addCustomCommand(&compileVoxlap);
+	addCustomCommand(&compileVoxlap);
 	addCustomFlags("-D -Dd../docs ../docs/candydoc/candy.ddoc ../docs/candydoc/modules.ddoc -version=CL_VERSION_1_1");
 
 	checkProgram("dmd", "Cannot find dmd to compile project! You can get it from http://dlang.org/download.html");
-	// Компиляция!
 	return proceedCmd(args);
 }

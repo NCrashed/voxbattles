@@ -1,2 +1,2 @@
-rdmd compile.d foguanCore debug
+rdmd compile.d all debug
 pause
