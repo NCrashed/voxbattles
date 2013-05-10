@@ -1,6 +1,6 @@
 Voxbattles
 ============
-Experimental game created for XGM arcade contest and testing voxlap and D2 connection ability. Gameplay inspired by City Tanks.
+Experimental game created for XGM arcade contest and testing voxlap and D2 connection ability. Gameplay inspired by [Battle City](http://ru.wikipedia.org/wiki/Battle_City).
 
 Compilation
 ===========
