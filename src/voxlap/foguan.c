@@ -13,8 +13,19 @@ api.obj: api.c api.h;                 cl /c /J /TP api.c     /Ox /Ob2 /Gs /MD
 #include "voxlap5.h"
 #include "api.h"
 dpoint3d ipos, istr, ihei, ifor;
+float mx, my, mz;
+long bstatus;
 
 vx5sprite desklamp;
+
+void generateDefaultMap()
+{
+  lpoint3d b,e;
+  b.x = 0; b.y = 0; b.z = 0;
+  e.x = VSID; e.y = VSID; e.z = VSID;
+
+  setrect(&b, &e, -1);
+}
 
 long initapp (long argc, char **argv)
 {
@@ -23,7 +34,7 @@ long initapp (long argc, char **argv)
       return 1;
    }
 
-   debugPrint();
+   debugPrint("Hi from voxlap!");
 
    xres = 640; yres = 480; colbits = 32; fullscreen = 0;
    initvoxlap();
@@ -37,7 +48,9 @@ long initapp (long argc, char **argv)
    desklamp.f.x = 0; desklamp.f.y = 0; desklamp.f.z = .4;
    desklamp.kfatim = 0; desklamp.okfatim = 0; desklamp.flags = 0;
 
-   unloadFoguanCore();
+   generateDefaultMap();
+   getCamera(&ipos, &istr, &ihei, &ifor);
+
    return(0);
 }
 
@@ -54,12 +67,17 @@ void doframe ()
    stopdirectdraw();
    nextpage();
    readkeyboard(); if (keystatus[1]) quitloop();
+
+   updateKeyboardEvents(keystatus);
+
+   readmouse(&mx, &my, &mz, &bstatus);
+   updateMouseEvents(mx, my, mz, bstatus);
 }
 
 void uninitapp () 
 { 
   freekv6(desklamp.voxnum); 
-  /*uninitvoxlap();*/ 
+  unloadFoguanCore();
   kzuninit(); 
 }
 
