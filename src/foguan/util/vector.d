@@ -91,7 +91,7 @@ struct Vector(StType, uint size)
 
 	static if(size > 0)
 	{
-		@property StType x() nothrow @trusted
+		@property StType x() nothrow const @trusted
 		{
 			return m[0];
 		}
@@ -104,7 +104,7 @@ struct Vector(StType, uint size)
 
 	static if(size > 1)
 	{
-		@property StType y() nothrow @trusted
+		@property StType y() nothrow const @trusted
 		{
 			return m[1];
 		}
@@ -117,7 +117,7 @@ struct Vector(StType, uint size)
 
 	static if(size > 2)
 	{
-		@property StType z() nothrow @trusted
+		@property StType z() nothrow const @trusted
 		{
 			return m[2];
 		}
@@ -248,6 +248,15 @@ struct Vector(StType, uint size)
 		return temp;
 	}
 
+	/// Унарный минус
+	thistype opUnary(string op)() if(op == "-")
+	{
+		thistype ret;
+		foreach(i,val; m)
+			ret.m[i] = -val;
+		return ret;
+	}
+
 	/// Cложение
 	thistype opBinary(string op)(thistype v) if (op == "+")
 	{
@@ -256,6 +265,12 @@ struct Vector(StType, uint size)
 			ret.m[i] = m[i]+val;
 
 		return ret;
+	}
+
+	void opOpAssign(string op)(thistype v) if(op == "+")
+	{
+		foreach(i,val; v.m)
+			m[i] += val;
 	}
 
 	/// Вычитание
@@ -268,6 +283,12 @@ struct Vector(StType, uint size)
 		return ret;
 	}
 
+	void opOpAssign(string op)(thistype v) if(op == "-")
+	{
+		foreach(i,val; v.m)
+			m[i] -= val;
+	}
+
 	/// Умножение на число
 	thistype opBinary(string op)(StType val) if (op == "*")
 	{
@@ -277,6 +298,16 @@ struct Vector(StType, uint size)
 
 		return ret;
 	}
+
+	thistype opBinaryRight(string op)(StType val) if (op == "*")
+	{
+		thistype ret;
+		foreach(i,coord; m)
+			ret.m[i] = coord*val;
+
+		return ret;
+	}
+
 
 	/// Сравнение двух векторов
 	bool opEquals(thistype v)

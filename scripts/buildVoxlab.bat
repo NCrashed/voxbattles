@@ -10,6 +10,9 @@ set lib=C:\Program Files (x86)\Microsoft DirectX SDK (June 2007)\Lib\x86;%lib%
 cd ..\src\voxlap
 nmake foguan.c
 
+@rem Delete old exe
+del ..\..\bin\voxbattles.exe
+
 @rem Copy result
 move foguan.exe ..\..\bin\voxbattles.exe
 move foguan.exe.manifest ..\..\bin\voxbattles.exe.manifest

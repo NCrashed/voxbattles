@@ -12,9 +12,13 @@ api.obj: api.c api.h;                 cl /c /J /TP api.c     /Ox /Ob2 /Gs /MD
 #include "sysmain.h"
 #include "voxlap5.h"
 #include "api.h"
+
+#define CLIPRAD 5
+
 dpoint3d ipos, istr, ihei, ifor;
 float mx, my, mz;
 long bstatus;
+double dt, olddt;
 
 vx5sprite desklamp;
 
@@ -33,13 +37,18 @@ long initapp (long argc, char **argv)
    {
       return 1;
    }
-
+   dt = olddt = 0.0;
    debugPrint("Hi from voxlap!");
 
-   xres = 640; yres = 480; colbits = 32; fullscreen = 0;
-   initvoxlap();
+   xres = 800; yres = 600; colbits = 32; fullscreen = 1;
+   if (initvoxlap() < 0) return(-1);
+   vx5.mipscandist = 300;
+   vx5.maxscandist = 500;
+   setsideshades(0,4,1,3,2,2);
+
    kzaddstack("voxdata.zip");
    loadvxl("vxl/untitled.vxl",&ipos,&istr,&ihei,&ifor);
+
 
    desklamp.voxnum = getkv6("kv6\\desklamp.kv6");
    desklamp.p.x = 652; desklamp.p.y = 620; desklamp.p.z = 103.5;
@@ -48,8 +57,8 @@ long initapp (long argc, char **argv)
    desklamp.f.x = 0; desklamp.f.y = 0; desklamp.f.z = .4;
    desklamp.kfatim = 0; desklamp.okfatim = 0; desklamp.flags = 0;
 
-   generateDefaultMap();
-   getCamera(&ipos, &istr, &ihei, &ifor);
+   //generateDefaultMap();
+   initializeCamera(&ipos, &istr, &ihei, &ifor);
 
    return(0);
 }
@@ -72,6 +81,22 @@ void doframe ()
 
    readmouse(&mx, &my, &mz, &bstatus);
    updateMouseEvents(mx, my, mz, bstatus);
+
+   readklock(&dt); 
+   update(dt - olddt);
+   olddt = dt;
+
+   dpoint3d tipos;
+   dpoint3d dp;
+   getCamera(&tipos, &istr, &ihei, &ifor);
+   dp.x = tipos.x-ipos.x;
+   dp.y = tipos.y-ipos.y;
+   dp.z = tipos.z-ipos.z;
+   clipmove(&ipos, &dp, CLIPRAD);
+   if(ipos.x != tipos.x || ipos.y != tipos.y || ipos.z != tipos.z)
+   {
+      correctCampos(&ipos);
+   }
 }
 
 void uninitapp () 

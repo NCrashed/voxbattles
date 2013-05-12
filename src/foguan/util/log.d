@@ -129,9 +129,8 @@ void writeLog(string msg, LOG_ERROR_LEVEL errLevel = LOG_ERROR_LEVEL.DEBUG, stri
 		}
 		else
 		{
-			//if(!forcedMute)
-			//	writeln(logsStyles[LOG_ERROR_LEVEL.WARNING], "Log ", logName, " doesnt exist. Creating new log.");
 			createLog(logName);
+			writeLog(msg, errLevel, logName);
 		}
 	} catch(Exception e)
 	{

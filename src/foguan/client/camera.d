@@ -30,17 +30,22 @@ class Camera
 	}
 
 	/// Camera direction vector
-	@property vec3 dir()
+	@property vec3 direction()
 	{
 		auto ret = mTarget-mPos;
 		ret.normalize();
 		return ret;
 	}
 
+	@property direction(vec3 val)
+	{
+		mTarget = mPos + val;
+	}
+
 	/// Camera left vector
 	@property vec3 left()
 	{
-		return mUp.cross(dir).normalized;
+		return direction.cross(mUp).normalized;
 	}
 
 	/// Camera posion
@@ -91,7 +96,6 @@ class Camera
 	*/
 	void rotate(vec3 axis, Radian angle)
 	{
-		import std.stdio;
 		if(angle == 0) return;
 
 		vec3 temp = mTarget-mPos;
@@ -101,7 +105,8 @@ class Camera
 
 		auto targetold = mTarget;
 		mTarget = mPos + temp2;
-
+		mUp = quat.rotate(mUp);
+		
 		// Критические углы
 		/*if((temp2-up).length2 <= UP_DIR_EPSILON)
 		{
@@ -117,7 +122,7 @@ class Camera
 	*/
 	void roll(Radian angle)
 	{
-		auto quat = Quaternion.create(dir, angle);
+		auto quat = Quaternion.create(direction, angle);
 		mUp = quat.rotate(mUp);
 	}
 	

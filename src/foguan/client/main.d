@@ -6,6 +6,7 @@ import core.runtime;
 import client.api;
 
 import client.input;
+import client.game;
 import util.log;
 import std.conv;
 
@@ -18,31 +19,14 @@ extern (Windows) BOOL DllMain(HINSTANCE hInstance, ULONG ulReason, LPVOID pvRese
 		case DLL_PROCESS_ATTACH: 
 			g_hInst = hInstance; 
 			Runtime.initialize();
-			dll_process_attach( hInstance, true ); 
+			dll_process_attach( hInstance, true );
+			
+			createCamera();
+			registerGeneralInput();
+			break;
+		case DLL_PROCESS_DETACH:
+			unregisterGeneralInput();
 
-			/*addMouseListener("debugMouse",
-				(mx, my, mz, event)
-				{
-					if(event == MouseEventType.LEFT_BUTTON_PRESS)
-					{
-						writeLog("Left press");
-					} else if(event == MouseEventType.LEFT_BUTTON_RELEASE)
-					{
-						writeLog("Left release");
-					} else if(event == MouseEventType.RIGHT_BUTTON_PRESS)
-					{
-						writeLog("Right press");
-					} else if(event == MouseEventType.RIGHT_BUTTON_RELEASE)
-					{
-						writeLog("Right release");
-					} 
-					
-					return true;
-				}
-			);*/
-
-			break; 
-		case DLL_PROCESS_DETACH: 
 			dll_process_detach( hInstance, true ); 
 			Runtime.terminate();
 			break; 
