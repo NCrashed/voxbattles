@@ -28,6 +28,8 @@ public
 	{
 		createFlat(50);
 		loadMap("test.map");
+
+		auto tower = new Sprite("kv6\\t55_tower.kv6", vec3(600, 600, MAXZDIM-140));
 	}
 
 	void registerGeneralInput()
