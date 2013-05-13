@@ -299,6 +299,12 @@ struct Vector(StType, uint size)
 		return ret;
 	}
 
+	void opOpAssign(string op)(StType val) if (op == "*")
+	{
+		foreach(ref mval; m)
+			mval *= val;
+	}
+
 	thistype opBinaryRight(string op)(StType val) if (op == "*")
 	{
 		thistype ret;

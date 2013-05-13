@@ -7,6 +7,7 @@ import client.api;
 
 import client.input;
 import client.game;
+import client.sprite;
 import util.log;
 import std.conv;
 
@@ -26,7 +27,8 @@ extern (Windows) BOOL DllMain(HINSTANCE hInstance, ULONG ulReason, LPVOID pvRese
 			break;
 		case DLL_PROCESS_DETACH:
 			unregisterGeneralInput();
-
+			freeAllSprites();
+			
 			dll_process_detach( hInstance, true ); 
 			Runtime.terminate();
 			break; 

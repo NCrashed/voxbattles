@@ -11,35 +11,67 @@ module client.game;
 import util.vector;
 import client.input;
 import client.camera;
+import client.map;
+import client.sprite;
+import client.api;
 
 enum CAMERA_SPEED = 75.0f;
+enum SHIFT_MODIFIER = 3.0f;
 enum CAMERA_ANG_SPEED = 0.015f;
+
+enum CELL_SIZE = 50;
+enum BORDER_SIZE = 1;
 
 public
 {
+	void initializeGame()
+	{
+		createFlat(50);
+		loadMap("test.map");
+	}
+
 	void registerGeneralInput()
 	{
 		addKeyboardListener("cameraControl",
 			(code, event)
 			{
+				static bool shift = false;
+				if(code == KeyCode.LEFT_SHIFT || code == KeyCode.RIGHT_SHIFT)
+				{
+					if(event == KeyboardEventType.KEY_PRESS)
+					{
+						mCameraMove *= SHIFT_MODIFIER;
+						shift = true;
+					}
+					else
+					{
+						if(mCameraMove.x > 0) mCameraMove.x = 1;
+						if(mCameraMove.y > 0) mCameraMove.y = 1;
+						shift = false;
+					}
+				}
+
+				float mdf = 1.0f;
+				if(shift) mdf *= SHIFT_MODIFIER;
+
 				if(code == KeyCode.CHAR_W || code == KeyCode.ARROW_UP)
 				{
-					mCameraMove.x = mCameraMove.x + (event == KeyboardEventType.KEY_PRESS ? -1 : 1);
+					mCameraMove.x = (event == KeyboardEventType.KEY_PRESS ? -mdf : 0);
 					return false;
 				}
 				if(code == KeyCode.CHAR_S || code == KeyCode.ARROW_DOWN)
 				{
-					mCameraMove.x = mCameraMove.x + (event == KeyboardEventType.KEY_PRESS ? 1 : -1);
+					mCameraMove.x = (event == KeyboardEventType.KEY_PRESS ? mdf : 0);
 					return false;
 				}
 				if(code == KeyCode.CHAR_A || code == KeyCode.ARROW_LEFT)
 				{
-					mCameraMove.y = mCameraMove.y + (event == KeyboardEventType.KEY_PRESS ? -1 : 1);
+					mCameraMove.y = (event == KeyboardEventType.KEY_PRESS ? -mdf : 0);
 					return false;
 				}	
 				if(code == KeyCode.CHAR_D || code == KeyCode.ARROW_RIGHT)
 				{
-					mCameraMove.y = mCameraMove.y + (event == KeyboardEventType.KEY_PRESS ? 1 : -1);
+					mCameraMove.y = (event == KeyboardEventType.KEY_PRESS ? mdf : 0);
 					return false;
 				}					
 				return true;
@@ -104,6 +136,6 @@ private
 	__gshared
 	{
 		Camera mCamera;
-		vec2i mCameraMove;		
+		vec2 mCameraMove;		
 	}
 }

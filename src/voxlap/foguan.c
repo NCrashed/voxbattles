@@ -9,6 +9,8 @@ api.obj: api.c api.h;                 cl /c /J /TP api.c     /Ox /Ob2 /Gs /MD
 !if 0
 #endif
 
+#include <math.h>
+#include <stdlib.h>
 #include "sysmain.h"
 #include "voxlap5.h"
 #include "api.h"
@@ -20,45 +22,79 @@ float mx, my, mz;
 long bstatus;
 double dt, olddt;
 
-vx5sprite desklamp;
-
-void generateDefaultMap()
+long groucol[9] = {0x506050,0x605848,0x705040,0x804838,0x704030,0x603828,
+  0x503020,0x402818,0x302010,};
+long mycolfunc (lpoint3d *p)
 {
-  lpoint3d b,e;
-  b.x = 0; b.y = 0; b.z = 0;
-  e.x = VSID; e.y = VSID; e.z = VSID;
-
-  setrect(&b, &e, -1);
+  long i, j;
+  j = groucol[(p->z>>5)+1]; i = groucol[p->z>>5];
+  i = ((((((j&0xff00ff)-(i&0xff00ff))*(p->z&31))>>5)+i)&0xff00ff) +
+     ((((((j&0x00ff00)-(i&0x00ff00))*(p->z&31))>>5)+i)&0x00ff00);
+  i += (labs((p->x&31)-16)<<16)+(labs((p->y&31)-16)<<8)+labs((p->z&31)-16);
+  j = rand(); i += (j&7) + ((j&0x70)<<4) + ((j&0x700)<<8);
+  return(i+0x80000000);
 }
 
 long initapp (long argc, char **argv)
 {
    if(loadFoguanCore() != 0)
    {
-      return 1;
+      exit(1);
    }
+
+   exportMapEditFuncs(
+      &setcube,
+      &setsphere,
+      &setellipsoid,
+      &setcylinder,
+      &setrect,
+      &settri,
+      &setsector,
+      &setspans,
+      &setheightmap,
+      &setkv6
+      );
+
+   exportModelFuncs(
+      &getkv6,
+      &freekv6,
+      &drawsprite,
+      &genmipkv6,
+      &curcolfunc,
+      &floorcolfunc,
+      &jitcolfunc,
+      &manycolfunc,
+      &sphcolfunc,
+      &woodcolfunc,
+      &pngcolfunc,
+      &kv6colfunc
+    );
+
    dt = olddt = 0.0;
    debugPrint("Hi from voxlap!");
 
    xres = 800; yres = 600; colbits = 32; fullscreen = 1;
    if (initvoxlap() < 0) return(-1);
-   vx5.mipscandist = 300;
-   vx5.maxscandist = 500;
+   
    setsideshades(0,4,1,3,2,2);
+   vx5.colfunc = mycolfunc; vx5.curcol = 0x80704030;
 
    kzaddstack("voxdata.zip");
    loadvxl("vxl/untitled.vxl",&ipos,&istr,&ihei,&ifor);
 
+   vx5.mipscandist = 192;
+   vx5.maxscandist = (long)(VSID*1.42);
+   vx5.kv6mipfactor = 128;
 
-   desklamp.voxnum = getkv6("kv6\\desklamp.kv6");
-   desklamp.p.x = 652; desklamp.p.y = 620; desklamp.p.z = 103.5;
-   desklamp.s.x = .4; desklamp.s.y = 0; desklamp.s.z = 0;
-   desklamp.h.x = 0; desklamp.h.y = .4; desklamp.h.z = 0;
-   desklamp.f.x = 0; desklamp.f.y = 0; desklamp.f.z = .4;
-   desklamp.kfatim = 0; desklamp.okfatim = 0; desklamp.flags = 0;
+   vx5.lightmode = 1;
+   vx5.vxlmipuse = 9; 
+   vx5.fallcheck = 1;
+   updatevxl();
 
-   //generateDefaultMap();
    initializeCamera(&ipos, &istr, &ihei, &ifor);
+   initGame();
+
+   updatevxl();
 
    return(0);
 }
@@ -71,7 +107,7 @@ void doframe ()
    setcamera(&ipos,&istr,&ihei,&ifor,xdim*.5,ydim*.5,xdim*.5);
    opticast();
 
-   drawsprite(&desklamp);
+   foguanCustomDraw();
 
    stopdirectdraw();
    nextpage();
@@ -101,7 +137,7 @@ void doframe ()
 
 void uninitapp () 
 { 
-  freekv6(desklamp.voxnum); 
+  //freekv6(desklamp.voxnum); 
   unloadFoguanCore();
   kzuninit(); 
 }
