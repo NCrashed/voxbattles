@@ -26,9 +26,6 @@ extern (Windows) BOOL DllMain(HINSTANCE hInstance, ULONG ulReason, LPVOID pvRese
 			registerGeneralInput();
 			break;
 		case DLL_PROCESS_DETACH:
-			unregisterGeneralInput();
-			freeAllSprites();
-			
 			dll_process_detach( hInstance, true ); 
 			Runtime.terminate();
 			break; 

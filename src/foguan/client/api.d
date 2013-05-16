@@ -147,6 +147,8 @@ extern(C)
 	alias int function(lpoint3d *) pt_pngcolfunc;
 	alias int function(lpoint3d *) pt_kv6colfunc;	
 
+	alias void function() pt_exitGame;
+	
 	__gshared
 	{
 		pt_voxlapSetCube voxlapSetCube;
@@ -174,6 +176,8 @@ extern(C)
 		pt_woodcolfunc woodcolfunc;
 		pt_pngcolfunc pngcolfunc;
 		pt_kv6colfunc kv6colfunc;
+
+		pt_exitGame exitGame;
 	}
 }
 extern(C)
@@ -354,6 +358,13 @@ extern(C)
 		woodcolfunc = fptr10;
 		pngcolfunc = fptr11;
 		kv6colfunc = fptr12;
+	}
+
+	export void exportUtilFuncs(
+			pt_exitGame fptr1,
+		)
+	{
+		exitGame = fptr1;
 	}
 }
 static this()

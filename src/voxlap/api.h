@@ -28,6 +28,8 @@ typedef long (*pt_woodcolfunc)(lpoint3d *);
 typedef long (*pt_pngcolfunc)(lpoint3d *);
 typedef long (*pt_kv6colfunc)(lpoint3d *);
 
+typedef void (*pt_exitGame)();
+
 int loadFoguanCore();
 int unloadFoguanCore();
 
@@ -71,4 +73,9 @@ void exportModelFuncs
 		pt_kv6colfunc fptr12
 	);
 
+void exportUtilFuncs
+	(
+		pt_exitGame fptr1
+	);
+	
 #endif /* API_H */

@@ -13,6 +13,8 @@ import std.string;
 import std.math;
 import util.log;
 import util.vector;
+import util.quaternion;
+import util.common;
 import client.api;
 
 public
@@ -101,18 +103,56 @@ public
 				sprite.p.y = val.y;
 				sprite.p.z = val.z;
 			}
+
+			void rotate(vec3 axis, Radian angle)
+			{
+				if(angle == 0) return;
+
+				vec3 dir = convertVoxlapVec(sprite.s);
+				vec3 left = convertVoxlapVec(sprite.h);
+				vec3 up = convertVoxlapVec(sprite.f);
+
+				axis.normalize();
+				auto quat = Quaternion.create(axis, angle);
+				dir = quat.rotate(dir);
+				left = quat.rotate(left);
+				up = quat.rotate(up);
+
+				setupVoxlapVec(sprite.s, dir);
+				setupVoxlapVec(sprite.h, left);
+				setupVoxlapVec(sprite.f, up);	
+			}
 		}
 		private
 		{
 			vx5sprite sprite;
 			bool mVisible = true;
+
+			vec3 convertVoxlapVec(ref point3d p)
+			{
+				vec3 ret;
+
+				ret.x = p.x; ret.y = p.y; ret.z = p.z;
+
+				return ret;
+			}
+
+			void setupVoxlapVec(ref point3d p, vec3 vec)
+			{
+				p.x = vec.x; p.y = vec.y; p.z = vec.z;
+			}
 		}
 	}
 
 	void freeAllSprites()
 	{
+		import std.conv;
+		writeLog(text(mAllSprites.length));
+		closeLog(GENERAL_LOG);
 		foreach(sprite; mAllSprites)
+		{
 			voxlapFreeKv6(sprite.original.voxnum);
+		}
 	}
 
 	void drawAllSprites()

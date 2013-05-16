@@ -35,6 +35,12 @@ long mycolfunc (lpoint3d *p)
   return(i+0x80000000);
 }
 
+bool needQuit = false;
+void quitGame()
+{
+  needQuit = true;
+}
+
 long initapp (long argc, char **argv)
 {
    if(loadFoguanCore() != 0)
@@ -70,17 +76,24 @@ long initapp (long argc, char **argv)
       &kv6colfunc
     );
 
+   exportUtilFuncs(
+      &quitGame
+    );
+
    dt = olddt = 0.0;
    debugPrint("Hi from voxlap!");
 
-   xres = 800; yres = 600; colbits = 32; fullscreen = 1;
+   xres = 1024; yres = 768; colbits = 32; fullscreen = 1;
    if (initvoxlap() < 0) return(-1);
    
    setsideshades(0,4,1,3,2,2);
    vx5.colfunc = mycolfunc; vx5.curcol = 0x80704030;
 
+   char *vxlnam, *skynam, *userst;
    kzaddstack("voxdata.zip");
+   loadsxl("sxl/default.sxl", &vxlnam, &skynam, &userst);
    loadvxl("vxl/untitled.vxl",&ipos,&istr,&ihei,&ifor);
+   loadsky(skynam);
 
    vx5.mipscandist = 192;
    vx5.maxscandist = (long)(VSID*1.42);
@@ -111,9 +124,14 @@ void doframe ()
 
    stopdirectdraw();
    nextpage();
-   readkeyboard(); if (keystatus[1]) quitloop();
+   readkeyboard(); //if (keystatus[1]) quitloop();
 
    updateKeyboardEvents(keystatus);
+
+   if(needQuit)
+   {
+      quitloop();
+   }
 
    readmouse(&mx, &my, &mz, &bstatus);
    updateMouseEvents(mx, my, mz, bstatus);
@@ -137,9 +155,9 @@ void doframe ()
 
 void uninitapp () 
 { 
-  //freekv6(desklamp.voxnum); 
   unloadFoguanCore();
   kzuninit(); 
+  uninitvoxlap();
 }
 
 

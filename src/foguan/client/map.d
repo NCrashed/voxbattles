@@ -93,9 +93,9 @@ public
 		voxlapSetColorFunc(jitcolfunc, getRGB(150, 150, 150));
 		voxlapSetRect(&p0, &p1, 1);
 
-		brickWallUp.position = vec3(where.x*CELL_SIZE+CELL_SIZE/2, where.y*CELL_SIZE+CELL_SIZE/2, MAXZDIM-mMapZLevel-CELL_SIZE/2);
+		/*brickWallUp.position = vec3(where.x*CELL_SIZE+CELL_SIZE/2, where.y*CELL_SIZE+CELL_SIZE/2, MAXZDIM-mMapZLevel-CELL_SIZE/2);
 		voxlapSetColorFunc(kv6colfunc, 1);
-		voxlapSetKv6(brickWallUp.original, 1);
+		voxlapSetKv6(brickWallUp.original, 1);*/
 
 		brickWallNorth.position = vec3(where.x*CELL_SIZE+CELL_SIZE/2, where.y*CELL_SIZE+CELL_SIZE/2, MAXZDIM-mMapZLevel-CELL_SIZE/2);
 		voxlapSetColorFunc(kv6colfunc, 1);

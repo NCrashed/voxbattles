@@ -102,6 +102,19 @@ void exportModelFuncs
 	p_exportModelFuncs(fptr1, fptr2, fptr3, fptr4, fptr5, fptr6, fptr7, fptr8, fptr9, fptr10, fptr11, fptr12);
 }
 
+typedef void (*pt_exportUtilFuncs)
+	(
+		pt_exitGame
+	);
+pt_exportUtilFuncs p_exportUtilFuncs;
+void exportUtilFuncs
+	(
+		pt_exitGame fptr1
+	)
+{
+	p_exportUtilFuncs(fptr1);
+}
+
 #define CORE_DLL "core.dll"
 
 void debugPrint(char* msg)
@@ -149,9 +162,10 @@ void foguanCustomDraw()
 	p_foguanCustomDraw();
 }
 
+HINSTANCE lib;
 int loadFoguanCore()
 {
-	HINSTANCE lib = LoadLibrary(TEXT(CORE_DLL));
+	lib = LoadLibrary(TEXT(CORE_DLL));
 	if(!lib)
 	{
 		return 1;
@@ -217,6 +231,12 @@ int loadFoguanCore()
 		return 1;
 	}
 
+	p_exportUtilFuncs = (pt_exportUtilFuncs)GetProcAddress(lib, TEXT("exportUtilFuncs"));
+	if(!p_exportUtilFuncs)
+	{
+		return 1;
+	}
+
 	p_foguanCustomDraw = (pt_foguanCustomDraw)GetProcAddress(lib, TEXT("foguanCustomDraw"));
 	if(!p_foguanCustomDraw)
 	{
@@ -228,9 +248,9 @@ int loadFoguanCore()
 
 int unloadFoguanCore()
 {
-	if(!FreeLibrary(GetModuleHandle(TEXT(CORE_DLL))))
+	if(!FreeLibrary(lib))
 	{
-		return 0;
+		return 1;
 	}
 
 	return 0;
