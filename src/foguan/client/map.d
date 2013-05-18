@@ -197,7 +197,7 @@ private
 		byte[CELL_SIZE][CELL_SIZE] buff;
 		foreach(ref arr; buff)
 			foreach(ref val; arr)
-				val = cast(byte)get_random(-10,11, m_w, m_z);
+				val = cast(byte)get_random(-7,18, m_w, m_z);
 		return buff;		
 	}
 
@@ -218,8 +218,8 @@ private
 		{
 			return getRGB(
 					cast(ubyte)0u, 
-					cast(ubyte)(127u+randomDiffs[sx][sy]), 
-					cast(ubyte)(14u+randomDiffs[sx][sy]));
+					cast(ubyte)(84u+randomDiffs[sx][sy]), 
+					cast(ubyte)(7u+randomDiffs[sx][sy]));
 		}
 		return getRGB(45, 45, 45);
 	}

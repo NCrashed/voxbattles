@@ -9,19 +9,22 @@
 module client.game;
 
 import std.math;
+import util.quaternion;
 import util.vector;
+
 import client.input;
 import client.camera;
 import client.map;
-import client.sprite;
 import client.api;
+import client.model;
+import client.tank;
 
 enum CAMERA_SPEED = 75.0f;
 enum SHIFT_MODIFIER = 3.0f;
 enum CAMERA_ANG_SPEED = 0.015f;
 
 enum CELL_SIZE = 50;
-enum BORDER_SIZE = 1;
+enum BORDER_SIZE = 0;
 
 public
 {
@@ -29,21 +32,11 @@ public
 	{
 		//cleanupMap();
 		createFlat(50);
-		loadMap("test.map");
+		//loadMap("test.map");
 
-		auto tower = new Sprite("kv6\\t55_tower.kv6", vec3(630, 600, MAXZDIM-73));
-		auto tbody = new Sprite("kv6\\t55_body.kv6", vec3(630, 600-10, MAXZDIM-73+14));
-		auto wheel1 = new Sprite("kv6\\t55_wheel.kv6", vec3(630-18, 600+13, MAXZDIM-73+15));
-		auto wheel2 = new Sprite("kv6\\t55_wheel.kv6", vec3(630-18, 600, MAXZDIM-73+15));
-		auto wheel3 = new Sprite("kv6\\t55_wheel.kv6", vec3(630-18, 600-13, MAXZDIM-73+15));
-
-		tower.rotate(ZUNIT, PI+0.5);
-		wheel1.rotate(ZUNIT, PI/2.0);
-		wheel1.scale(vec3(0.7,0.7,0.7));
-		wheel2.rotate(ZUNIT, PI/2.0);
-		wheel2.scale(vec3(0.7,0.7,0.7));
-		wheel3.rotate(ZUNIT, PI/2.0);
-		wheel3.scale(vec3(0.7,0.7,0.7));
+		auto tank = new NormalTank(vec3(630, 590, MAXZDIM-75));
+		auto btr = new BTRTank(vec3(500, 500, MAXZDIM-70));
+		auto heavy = new HeavyTank(vec3(400, 400, MAXZDIM-70));
 	}
 
 	void registerGeneralInput()

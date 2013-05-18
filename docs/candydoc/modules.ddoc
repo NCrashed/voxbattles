@@ -2,6 +2,8 @@ MODULES =
 	$(MODULE client.api)
 	$(MODULE client.input)
 	$(MODULE client.camera)
+	$(MODULE client.kv6)
+	$(MODULE client.model)
 	$(MODULE util.common)
 	$(MODULE util.log)
 	$(MODULE util.matrix)

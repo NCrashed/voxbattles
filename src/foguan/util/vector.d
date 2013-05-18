@@ -42,6 +42,7 @@ alias Vector!(size_t, 2) vec2st;
 const vec3 ZUNIT = vec3(0,0,1);
 const vec3 XUNIT = vec3(1,0,0);
 const vec3 YUNIT = vec3(0,1,0);
+const vec3 ZVEC = vec3(0,0,0);
 
 private T[size] initArray(T,int size)(T value)
 {
