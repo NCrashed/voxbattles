@@ -121,6 +121,7 @@ extern(C)
 	}
 
 	// Functions loaded from voxlap
+	// Map edit functions
 	alias void function(int px, int py, int pz, int col) pt_voxlapSetCube;
 	alias void function(lpoint3d* hit, int hitrad, int dacol) pt_voxlapSetSphere;
 	alias void function(lpoint3d* hit, lpoint3d* hit2, int hitrad, int dacol, int bakit) pt_voxlapSetElipsoid;
@@ -132,12 +133,14 @@ extern(C)
 	alias void function(const char* hptr, int hpitch, int hxdim, int hydim, int x0, int y0, int x1, int y1) pt_voxlapSetHeightmap;
 	alias void function(vx5sprite* spr, int dacol) pt_voxlapSetKv6;
 
+	// Operating models
 	alias void function(int function(lpoint3d* p) colfunc, int curcol) pt_voxlapSetColorFunc;
-	
 	alias kv6data* function(const char*) pt_voxlapGetKv6;
 	alias void function(kv6data* kv6) pt_voxlapFreeKv6;
 	alias void function(vx5sprite* sprite) pt_voxlapDrawSprite;
 	alias kv6data* function(kv6data* kv6) pt_voxlapGenMipKv6;
+
+	// Color functions
 	alias int function(lpoint3d *) pt_curcolfunc;
 	alias int function(lpoint3d *) pt_floorcolfunc;
 	alias int function(lpoint3d *) pt_jitcolfunc;
@@ -147,8 +150,26 @@ extern(C)
 	alias int function(lpoint3d *) pt_pngcolfunc;
 	alias int function(lpoint3d *) pt_kv6colfunc;	
 
+	// Util functions
 	alias void function() pt_exitGame;
 	
+	// Physic help functions
+	alias void function(point3d *v0, point3d *v1, point3d *v2) pt_orthonormalize;
+	alias void function(dpoint3d *v0, dpoint3d *v1, dpoint3d *v2) pt_dorthonormalize;
+	alias void function(float ox, float oy, float oz, point3d *ist, point3d *ihe, point3d *ifo) pt_orthorotate;
+	alias void function(double ox, double oy, double oz, dpoint3d *ist, dpoint3d *ihe, dpoint3d *ifo) pt_dorthorotate;
+	alias void function(point3d *p, point3d *axis, float w) pt_axisrotate;
+	alias void function(point3d *istr, point3d *ihei, point3d *ifor,
+				point3d *istr2, point3d *ihei2, point3d *ifor2,
+				point3d *ist, point3d *ihe, point3d *ifo, float rat) pt_slerp;
+	alias int function(point3d *p0, point3d *p1, lpoint3d *hit) pt_cansee;
+	alias void function(dpoint3d *p, dpoint3d *d, lpoint3d *h, int **ind, int *dir) pt_hitscan;
+	alias void function(dpoint3d *p0, dpoint3d *v0, vx5sprite *spr, lpoint3d *h, kv6voxtype **ind, float *vsc) pt_sprhitscan;
+	alias double function(double px, double py, double pz, double cr) pt_findmaxcr;
+	alias void function(dpoint3d *p, dpoint3d *v, double acr) pt_clipmove;
+	alias int function(point3d *p0, point3d *p1, point3d *p2, point3d *hit, lpoint3d *lhit) pt_triscan;
+	alias void function(int x, int y, int z, point3d *fp) pt_estnorm;
+
 	__gshared
 	{
 		pt_voxlapSetCube voxlapSetCube;
@@ -178,6 +199,20 @@ extern(C)
 		pt_kv6colfunc kv6colfunc;
 
 		pt_exitGame exitGame;
+
+		pt_orthonormalize orthonormalize;
+		pt_dorthonormalize dorthonormalize;
+		pt_orthorotate orthorotate;
+		pt_dorthorotate dorthorotate;
+		pt_axisrotate axisrotate;
+		pt_slerp slerp;
+		pt_cansee cansee;
+		pt_hitscan hitscan;
+		pt_sprhitscan sprhitscan;
+		pt_findmaxcr findmaxcr;
+		pt_clipmove clipmove;
+		pt_triscan triscan;
+		pt_estnorm estnorm;
 	}
 }
 extern(C)
@@ -365,6 +400,37 @@ extern(C)
 		)
 	{
 		exitGame = fptr1;
+	}
+
+	export void exportPhysicFuncs(
+			pt_orthonormalize fptr1,
+			pt_dorthonormalize fptr2,
+			pt_orthorotate fptr3,
+			pt_dorthorotate fptr4,
+			pt_axisrotate fptr5,
+			pt_slerp fptr6,
+			pt_cansee fptr7,
+			pt_hitscan fptr8,
+			pt_sprhitscan fptr9,
+			pt_findmaxcr fptr10,
+			pt_clipmove fptr11,
+			pt_triscan fptr12,
+			pt_estnorm fptr13
+		)
+	{
+		orthonormalize = fptr1;
+		dorthonormalize = fptr2;
+		orthorotate = fptr3;
+		dorthorotate = fptr4;
+		axisrotate = fptr5;
+		slerp = fptr6;
+		cansee = fptr7;
+		hitscan = fptr8;
+		sprhitscan = fptr9;
+		findmaxcr = fptr10;
+		clipmove = fptr11;
+		triscan = fptr12;
+		estnorm = fptr13;		
 	}
 }
 static this()

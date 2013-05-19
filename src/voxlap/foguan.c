@@ -80,6 +80,22 @@ long initapp (long argc, char **argv)
       &quitGame
     );
 
+   exportPhysicFuncs(
+      &orthonormalize,
+      &dorthonormalize,
+      &orthorotate,
+      &dorthorotate,
+      &axisrotate,
+      &slerp,
+      &cansee,
+      &hitscan,
+      &sprhitscan,
+      &findmaxcr,
+      &clipmove,
+      &triscan,
+      &estnorm
+    );
+
    dt = olddt = 0.0;
    debugPrint("Hi from voxlap!");
 

@@ -30,6 +30,20 @@ typedef long (*pt_kv6colfunc)(lpoint3d *);
 
 typedef void (*pt_exitGame)();
 
+typedef void (*pt_orthonormalize)(point3d *, point3d *, point3d *);
+typedef void (*pt_dorthonormalize)(dpoint3d *, dpoint3d *, dpoint3d *);
+typedef void (*pt_orthorotate)(float, float, float, point3d *, point3d *, point3d *);
+typedef void (*pt_dorthorotate)(double, double, double, dpoint3d *, dpoint3d *, dpoint3d *);
+typedef void (*pt_axisrotate)(point3d *, point3d *, float);
+typedef void (*pt_slerp)(point3d *, point3d *, point3d *, point3d *, point3d *, point3d *, point3d *, point3d *, point3d *, float);
+typedef long (*pt_cansee)(point3d *, point3d *, lpoint3d *);
+typedef void (*pt_hitscan)(dpoint3d *, dpoint3d *, lpoint3d *, long **, long *);
+typedef void (*pt_sprhitscan)(dpoint3d *, dpoint3d *, vx5sprite *, lpoint3d *, kv6voxtype **, float *vsc);
+typedef double (*pt_findmaxcr)(double, double, double, double);
+typedef void (*pt_clipmove)(dpoint3d *, dpoint3d *, double);
+typedef long (*pt_triscan)(point3d *, point3d *, point3d *, point3d *, lpoint3d *);
+typedef void (pt_estnorm)(long, long, long, point3d *);
+
 int loadFoguanCore();
 int unloadFoguanCore();
 
@@ -76,6 +90,23 @@ void exportModelFuncs
 void exportUtilFuncs
 	(
 		pt_exitGame fptr1
+	);
+	
+void exportPhysicFuncs
+	(
+		pt_orthonormalize fptr1,
+		pt_dorthonormalize fptr2,
+		pt_orthorotate fptr3,
+		pt_dorthorotate fptr4,
+		pt_axisrotate fptr5,
+		pt_slerp fptr6,
+		pt_cansee fptr7,
+		pt_hitscan fptr8,
+		pt_sprhitscan fptr9,
+		pt_findmaxcr fptr10,
+		pt_clipmove fptr11,
+		pt_triscan fptr12,
+		pt_estnorm fptr13
 	);
 	
 #endif /* API_H */

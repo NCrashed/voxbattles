@@ -115,6 +115,45 @@ void exportUtilFuncs
 	p_exportUtilFuncs(fptr1);
 }
 
+typedef void (*pt_exportPhysicFuncs)
+	(
+		pt_orthonormalize,
+		pt_dorthonormalize,
+		pt_orthorotate,
+		pt_dorthorotate,
+		pt_axisrotate,
+		pt_slerp,
+		pt_cansee,
+		pt_hitscan,
+		pt_sprhitscan,
+		pt_findmaxcr,
+		pt_clipmove,
+		pt_triscan,
+		pt_estnorm
+	);
+pt_exportPhysicFuncs p_exportPhysicFuncs;
+void exportPhysicFuncs
+	(
+		pt_orthonormalize fptr1,
+		pt_dorthonormalize fptr2,
+		pt_orthorotate fptr3,
+		pt_dorthorotate fptr4,
+		pt_axisrotate fptr5,
+		pt_slerp fptr6,
+		pt_cansee fptr7,
+		pt_hitscan fptr8,
+		pt_sprhitscan fptr9,
+		pt_findmaxcr fptr10,
+		pt_clipmove fptr11,
+		pt_triscan fptr12,
+		pt_estnorm fptr13
+	)
+{
+	p_exportPhysicFuncs(fptr1, fptr2, fptr3, fptr4,
+		fptr5, fptr6, fptr7, fptr8, fptr9, fptr10,
+		fptr11, fptr12, fptr13);
+}
+
 #define CORE_DLL "core.dll"
 
 void debugPrint(char* msg)
@@ -233,6 +272,12 @@ int loadFoguanCore()
 
 	p_exportUtilFuncs = (pt_exportUtilFuncs)GetProcAddress(lib, TEXT("exportUtilFuncs"));
 	if(!p_exportUtilFuncs)
+	{
+		return 1;
+	}
+
+	p_exportPhysicFuncs = (pt_exportPhysicFuncs)GetProcAddress(lib, TEXT("exportPhysicFuncs"));
+	if(!p_exportPhysicFuncs)
 	{
 		return 1;
 	}
