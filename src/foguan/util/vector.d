@@ -249,6 +249,13 @@ struct Vector(StType, uint size)
 		return temp;
 	}
 
+	/// Посчитать проекцию на вектор v
+	thistype project(thistype v)
+	{
+		auto vn = v.normalized();
+		return this.dot(vn)*vn;
+	}
+
 	/// Унарный минус
 	thistype opUnary(string op)() if(op == "-")
 	{

@@ -115,7 +115,7 @@ public
 			void rotate(Quaternion quat)
 			{
 				if(quat == ZERO_QUATERNION) return;
-				
+
 				vec3 dir = convertVoxlapVec(sprite.s);
 				vec3 left = convertVoxlapVec(sprite.h);
 				vec3 up = convertVoxlapVec(sprite.f);
@@ -124,14 +124,22 @@ public
 				left = quat.rotate(left);
 				up = quat.rotate(up);
 
+				savedRotation = savedRotation*quat;
+				
 				setupVoxlapVec(sprite.s, dir);
 				setupVoxlapVec(sprite.h, left);
 				setupVoxlapVec(sprite.f, up);
+			}
+
+			Quaternion rotation() @property
+			{
+				return savedRotation;
 			}
 		}
 		private
 		{
 			vx5sprite sprite;
+			Quaternion savedRotation;
 			bool mVisible = true;
 
 			vec3 convertVoxlapVec(ref point3d p)

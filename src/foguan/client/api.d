@@ -7,6 +7,7 @@ import util.vector;
 import util.common;
 import util.log;
 
+import client.physics.core;
 import client.input;
 import client.game;
 import client.sprite;
@@ -307,6 +308,7 @@ extern(C)
 		try
 		{
 			updateGameCamera(dt);
+			physicUpdate(dt);
 		}
 		catch(Exception e)
 		{

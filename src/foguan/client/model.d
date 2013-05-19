@@ -12,6 +12,7 @@ import std.typecons;
 import util.vector;
 import util.quaternion;
 import client.sprite;
+import client.physics.rigidBody;
 
 /**
 *	Tuple describes main part of a $(B Model) which will
@@ -66,9 +67,10 @@ class Model(Parts...)
 	if(
 		is(typeof(Parts[0]) == MainPartTuple)  
 		&& (Parts.length == 1 || isSubPartsList!(Parts[1..$]))
-	)
+	) : RigidBody
 {
 	static assert(isSubPartsUniq(Parts[0].name, Parts[1..$]), "Parts names must be uniq!");
+	mixin ConstructRigidBody!(Model!Parts, 10, 0.5, 0.8, 0.01);
 
 	public
 	{
@@ -87,6 +89,21 @@ class Model(Parts...)
 				sprite.scale(tp.scale);
 				sprite.rotate(tp.rotation);
 				partsInfo[tp.name] = PartInfo(tp[1], tp[2], tp[3], tp[4], sprite);			
+			}
+		}
+
+		void initialize()
+		{
+			position = partsInfo[MainPart.name].sprite.position;
+			rotation = partsInfo[MainPart.name].sprite.rotation;
+		}
+
+		void synchronizePositions()
+		{
+			auto dvec = position - partsInfo[MainPart.name].sprite.position;
+			foreach(info; partsInfo)
+			{
+				info.sprite.position = info.sprite.position + dvec;
 			}
 		}
 	}

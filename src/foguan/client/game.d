@@ -12,6 +12,8 @@ import std.math;
 import util.quaternion;
 import util.vector;
 
+import client.physics.core;
+import client.physics.bounds;
 import client.input;
 import client.camera;
 import client.map;
@@ -37,6 +39,11 @@ public
 		auto tank = new NormalTank(vec3(630, 590, MAXZDIM-75));
 		auto btr = new BTRTank(vec3(500, 500, MAXZDIM-70));
 		auto heavy = new HeavyTank(vec3(400, 400, MAXZDIM-70));
+
+		auto ball = new TestBall(vec3(650, 650, MAXZDIM-75));
+		ball.velocity = vec3(0, 0, -15);
+		ball.setBounds = new SphereBounds(15);
+		registerRigidBody(ball);
 	}
 
 	void registerGeneralInput()

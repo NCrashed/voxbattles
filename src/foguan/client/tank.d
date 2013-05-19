@@ -16,9 +16,9 @@ import client.model;
 alias Model!(
 			MainPartTuple("Body", "kv6/t55_body.kv6", vec3(1, 1, 1)),
 			SubPartTuple("Tower", "kv6/t55_tower.kv6", vec3(1, 1, 1), vec3(0,10,-14), Quaternion.create(ZUNIT, -PI/2.0)),
-			SubPartTuple("WheelLeft1","kv6/t55_wheel.kv6", vec3(0.7,0.7,0.7), vec3(-18,23,1), Quaternion.create(ZUNIT, PI/2.0)),
-			SubPartTuple("WheelLeft2","kv6/t55_wheel.kv6", vec3(0.7,0.7,0.7), vec3(-18,10,1), Quaternion.create(ZUNIT, PI/2.0)),
-			SubPartTuple("WheelLeft3","kv6/t55_wheel.kv6", vec3(0.7,0.7,0.7), vec3(-18,-3,1), Quaternion.create(ZUNIT, PI/2.0)),
+			SubPartTuple("WheelLeft1","kv6/t55_wheel.kv6", vec3(0.7,0.7,0.7), vec3(-18,23,1), Quaternion.create(ZUNIT, -PI/2.0)),
+			SubPartTuple("WheelLeft2","kv6/t55_wheel.kv6", vec3(0.7,0.7,0.7), vec3(-18,10,1), Quaternion.create(ZUNIT, -PI/2.0)),
+			SubPartTuple("WheelLeft3","kv6/t55_wheel.kv6", vec3(0.7,0.7,0.7), vec3(-18,-3,1), Quaternion.create(ZUNIT, -PI/2.0)),
 			SubPartTuple("WheelRight1","kv6/t55_wheel.kv6", vec3(0.7,0.7,0.7), vec3(18,23,1), Quaternion.create(ZUNIT, PI/2.0)),
 			SubPartTuple("WheelRight2","kv6/t55_wheel.kv6", vec3(0.7,0.7,0.7), vec3(18,10,1), Quaternion.create(ZUNIT, PI/2.0)),
 			SubPartTuple("WheelRight3","kv6/t55_wheel.kv6", vec3(0.7,0.7,0.7), vec3(18,-3,1), Quaternion.create(ZUNIT, PI/2.0))
@@ -43,3 +43,8 @@ alias Model!(
 			SubPartTuple("WheelRight1","kv6/HeavyWheel.kv6", vec3(1.25, 1.8, 1.8), vec3(20,6,5), ZERO_QUATERNION),
 			SubPartTuple("WheelRight2","kv6/HeavyWheel.kv6", vec3(1.25, 1.8, 1.8), vec3(20,30,5), ZERO_QUATERNION),
 		) HeavyTank;
+
+// test
+alias Model!(
+		MainPartTuple("Body", "kv6/testball.kv6", vec3(1.0, 1.0, 1.0))
+	) TestBall;
