@@ -135,11 +135,30 @@ public
 			{
 				return savedRotation;
 			}
+
+			void rotation(Quaternion quat) @property
+			{
+				if(quat == ZERO_QUATERNION) return;
+
+				vec3 dir =  vec3(1.0, 0.0, 0.0);
+				vec3 left = vec3(0.0, 1.0, 0.0);
+				vec3 up =   vec3(0.0, 0.0, 1.0);
+
+				dir = quat.rotate(dir);
+				left = quat.rotate(left);
+				up = quat.rotate(up);
+
+				savedRotation = quat;
+				
+				setupVoxlapVec(sprite.s, dir);
+				setupVoxlapVec(sprite.h, left);
+				setupVoxlapVec(sprite.f, up);
+			}
 		}
 		private
 		{
 			vx5sprite sprite;
-			Quaternion savedRotation;
+			Quaternion savedRotation = Quaternion.create(ZUNIT, 0);
 			bool mVisible = true;
 
 			vec3 convertVoxlapVec(ref point3d p)

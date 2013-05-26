@@ -14,6 +14,7 @@ import std.math;
 import std.traits;
 import std.array;
 import std.conv;
+import util.quaternion;
 
 alias Vector!(float,4) vec4;
 alias Vector!(float,3) vec3;
@@ -415,6 +416,14 @@ struct Vector(StType, uint size)
 			Vector!(StType, 3) ret;
 			ret.z = x*v.y - v.x*y;
 			return ret;		
+		}
+	}
+
+	static if(size == 3 && isFloatingPoint!StType)
+	{
+		T opCast(T)() if(is(T==Quaternion))
+		{
+			return Quaternion.create(normalized, length);
 		}
 	}
 }

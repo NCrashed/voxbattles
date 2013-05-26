@@ -28,14 +28,14 @@ interface RigidBody
 	vec3		velocity() 					@property;
 	void		velocity(vec3 val) 			@property;
 
-	Quaternion 	angvelocity() 				@property;
-	void		angvelocity(Quaternion val) @property;
+	vec3	 	angvelocity() 				@property;
+	void		angvelocity(vec3 val)		 @property;
 
 	vec3		force() 					@property;
 	void		force(vec3 val)				@property;
 
-	Quaternion 	angforce()					@property;
-	void		angforce(Quaternion val)	@property;
+	vec3 		angforce()					@property;
+	void		angforce(vec3 val)		@property;
 
 	vec3		gravity()				@property;
 	void		gravity(vec3 val)		@property;
@@ -44,6 +44,7 @@ interface RigidBody
 	void		mass(double val) 		@property;
 
 	Matrix!3	inertia()				@property;
+	Matrix!3	inertiaInversed()		@property;	
 	void		inertia(Matrix!3 val)	@property;
 
 	double		elastic()				@property;
@@ -81,10 +82,10 @@ interface RigidBody
 */
 mixin template ConstructRigidBody(
 	BaseType,
-	double initMass, 
-	double initElastic,
-	double initFriction,
-	double initResilient)
+	double 		initMass,
+	double 		initElastic,
+	double 		initFriction,
+	double 		initResilient)
 {
 	static assert(is(BaseType : RigidBody), BaseType.stringof~" must be implements interface RigidBody to mixin ConstructRigidBody!");
 
@@ -101,15 +102,16 @@ mixin template ConstructRigidBody(
 		Quaternion 	rotation;
 
 		vec3		velocity;
-		Quaternion 	angvelocity;
+		vec3 		angvelocity;
 
 		vec3		force;
-		Quaternion 	angforce;
+		vec3	 	angforce;
 
 		vec3		gravity   = G_VECTOR;
 
 		double		mass 	  = initMass;
 		Matrix!3	inertia;
+		Matrix!3	inertiaInversed;
 
 		double		elastic   = initElastic;
 		double		friction  = initFriction;
@@ -158,11 +160,11 @@ mixin template ConstructRigidBody(
 		RigidBodyMembers.velocity = val;
 	}
 
-	Quaternion angvelocity() @property
+	vec3 angvelocity() @property
 	{
 		return RigidBodyMembers.angvelocity;
 	}
-	void angvelocity(Quaternion val) @property
+	void angvelocity(vec3 val) @property
 	{
 		RigidBodyMembers.angvelocity = val;
 	}
@@ -176,11 +178,11 @@ mixin template ConstructRigidBody(
 		RigidBodyMembers.force = val;
 	}
 
-	Quaternion angforce() @property
+	vec3 angforce() @property
 	{
 		return RigidBodyMembers.angforce;
 	}
-	void angforce(Quaternion val) @property
+	void angforce(vec3 val) @property
 	{
 		RigidBodyMembers.angforce = val;
 	}
@@ -207,9 +209,14 @@ mixin template ConstructRigidBody(
 	{
 		return RigidBodyMembers.inertia;
 	}
+	Matrix!3 inertiaInversed() @property
+	{
+		return RigidBodyMembers.inertiaInversed;
+	}	
 	void inertia(Matrix!3 val) @property
 	{
 		RigidBodyMembers.inertia = val;
+		RigidBodyMembers.inertiaInversed = val.inverse;
 	}
 
 	double elastic() @property

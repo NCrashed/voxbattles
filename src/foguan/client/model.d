@@ -101,9 +101,11 @@ class Model(Parts...)
 		void synchronizePositions()
 		{
 			auto dvec = position - partsInfo[MainPart.name].sprite.position;
+		
 			foreach(info; partsInfo)
 			{
 				info.sprite.position = info.sprite.position + dvec;
+				info.sprite.rotation = rotation;
 			}
 		}
 	}

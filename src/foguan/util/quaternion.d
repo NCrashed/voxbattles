@@ -357,6 +357,12 @@ struct Quaternion
 		prepare(vAxis, angle);
 		return rotate(v);
 	}
+
+	/// Трансформация в 3мерный вектор
+	T opCast(T)() if(is(T == vec3))
+	{
+		return vec.normalized*scalar;
+	}
 }
 
 unittest

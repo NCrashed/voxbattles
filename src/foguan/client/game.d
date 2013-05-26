@@ -41,7 +41,8 @@ public
 		auto heavy = new HeavyTank(vec3(400, 400, MAXZDIM-70));
 
 		auto ball = new TestBall(vec3(650, 650, MAXZDIM-75));
-		ball.velocity = vec3(0, 0, -15);
+		ball.velocity = vec3(0, 5, -15);
+		ball.angvelocity = vec3(0,0,1.0)*0.01;
 		ball.setBounds = new SphereBounds(15);
 		registerRigidBody(ball);
 	}

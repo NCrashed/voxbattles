@@ -12,8 +12,12 @@ import std.algorithm;
 import std.range;
 import std.container;
 import util.vector;
+import util.quaternion;
 import client.physics.rigidBody;
 import client.api;
+
+import util.log, std.conv;
+enum CRASH_LOG = "CrashReport.log";
 
 public
 {
@@ -30,41 +34,48 @@ public
 
 	void physicUpdate(double dt)
 	{
-		foreach(rbody; bodies)
+		try
 		{
-			//calc forces
-
-			// collisions with map
-			vec3 mapCollCorrection = vec3(0,0,0);
-			bool mapCorrection = false;
-			if(rbody.bounds !is null)
+			foreach(rbody; bodies)
 			{
-				auto hitres = rbody.bounds.intersectWithMap(rbody.position);
-				if(hitres.mapPos != vec3i(-1, -1, -1))
+				//calc forces
+
+				// collisions with map
+				if(rbody.bounds !is null)
 				{
-					point3d normal;
-					estnorm(hitres.mapPos.x, hitres.mapPos.y, hitres.mapPos.z, &normal);
-					vec3 n = vec3(normal.x, normal.y, normal.z);
+					auto hitres = rbody.bounds.intersectWithMap(rbody.position);
+					while(hitres.mapPos != vec3i(-1, -1, -1))
+					{
+						point3d normal;
+						estnorm(hitres.mapPos.x, hitres.mapPos.y, hitres.mapPos.z, &normal);
+						vec3 n = vec3(normal.x, normal.y, normal.z);
 
-					rbody.velocity = rbody.velocity - (1+rbody.elastic) * rbody.velocity.project(n);
+						rbody.velocity = rbody.velocity - (1+rbody.elastic) * rbody.velocity.project(n);
+						rbody.position = rbody.position + hitres.posCorrection.project(n);
 
-					mapCollCorrection = hitres.posCorrection.normalized;
-					mapCorrection = true;
-					rbody.position = rbody.position + hitres.posCorrection;
+						//friction
+
+						hitres = rbody.bounds.intersectWithMap(rbody.position);
+					}
 				}
+
+				//update position
+				rbody.velocity = rbody.velocity + rbody.force * (dt/rbody.mass) + rbody.gravity * dt;
+				rbody.position = rbody.position + rbody.velocity * dt;
+					
+				//update rotation
+				//rbody.angvelocity = rbody.angvelocity + rbody.inertiaInversed * rbody.angforce * dt;
+				rbody.rotation = rbody.rotation*cast(Quaternion)rbody.angvelocity;
+
+				rbody.force 	= ZVEC;
+				rbody.angforce  = ZVEC;
+				rbody.synchronizePositions();
 			}
-
-			//update position
-			rbody.velocity = rbody.velocity + rbody.force * (dt/rbody.mass) + rbody.gravity * dt;
-			auto temp = rbody.velocity * dt;
-			rbody.position = rbody.position + temp;
-
-			//if(mapCorrection)
-			//	rbody.position = rbody.position + temp.project(mapCollCorrection);
-				
-
-			rbody.force = vec3(0, 0, 0);
-			rbody.synchronizePositions();
+		} catch(Exception e)
+		{
+			writeLog(text(e.msg), LOG_ERROR_LEVEL.FATAL, CRASH_LOG);
+			writeLog(text(e.info), LOG_ERROR_LEVEL.FATAL, CRASH_LOG);
+			closeLog(CRASH_LOG);
 		}
 	}
 }

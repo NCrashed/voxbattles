@@ -10,4 +10,4 @@ module client.physics.constants;
 
 import util.vector;
 
-enum G_VECTOR = vec3(0, 0, 0.6);
+enum G_VECTOR = vec3(0, 0, 2.6);
